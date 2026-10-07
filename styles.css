@@ -1,0 +1,774 @@
+.hmr-view {
+  --mindmap-node-min-width: 240px;
+  --mindmap-node-min-height: 58px;
+  background: var(--background-primary);
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hmr-toolbar {
+  align-items: center;
+  border-bottom: 1px solid var(--background-modifier-border);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 10px 12px;
+}
+
+.hmr-toolbar-title {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hmr-toolbar-title span {
+  color: var(--text-normal);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hmr-toolbar-title small {
+  color: var(--text-muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hmr-toolbar-actions {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.hmr-toolbar-actions button {
+  align-items: center;
+  display: inline-flex;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+.hmr-zoom-controls {
+  align-items: center;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  padding: 2px;
+}
+
+.hmr-zoom-label {
+  color: var(--text-muted);
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  min-width: 44px;
+  text-align: center;
+}
+
+.hmr-shortcut-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.hmr-shortcut-table th,
+.hmr-shortcut-table td {
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.hmr-shortcut-table th {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hmr-shortcut-table kbd {
+  color: var(--text-normal);
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.hmr-toolbar-toggle {
+  align-items: center;
+  color: var(--text-muted);
+  display: inline-flex;
+  font-size: 12px;
+  gap: 6px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hmr-split {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* With the Obsidian editor tab the note lives in its own tab, so the in-view note pane and divider are hidden. */
+.hmr-split.is-native-editor > .hmr-divider,
+.hmr-split.is-native-editor > .hmr-body {
+  display: none;
+}
+
+.hmr-split.is-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.hmr-canvas {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 120px;
+  overflow: auto;
+  position: relative;
+}
+
+.hmr-canvas {
+  background-attachment: local;
+  background-color: var(--background-primary);
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--text-faint) 40%, transparent) 1px, transparent 1.4px);
+  background-size: 24px 24px;
+  cursor: grab;
+  user-select: none;
+}
+
+.hmr-canvas .hmr-node-title-input {
+  user-select: text;
+}
+
+.hmr-canvas.is-panning {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.hmr-canvas.is-panning .hmr-node {
+  cursor: grabbing;
+}
+
+.hmr-node.is-dragging {
+  opacity: 0.35;
+}
+
+.hmr-drag-ghost {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  opacity: 0.9;
+  pointer-events: none;
+  position: fixed;
+  transform-origin: 0 0;
+  z-index: var(--layer-tooltip, 1000);
+}
+
+.hmr-canvas.is-node-dragging,
+.hmr-canvas.is-node-dragging .hmr-node {
+  cursor: grabbing;
+}
+
+/* Insertion line shown in the gap between two nodes while dragging. */
+.hmr-drop-line {
+  background: var(--interactive-accent);
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px rgba(var(--interactive-accent-rgb), 0.25);
+  display: none;
+  height: 4px;
+  margin-top: -2px;
+  pointer-events: none;
+  position: fixed;
+  z-index: var(--layer-tooltip, 1000);
+}
+
+.hmr-drop-line.is-visible {
+  display: block;
+}
+
+.hmr-drop-line.is-invalid {
+  background: var(--text-error, #d33);
+  box-shadow: 0 0 0 3px rgba(211, 51, 51, 0.25);
+}
+
+.hmr-node.is-drop-child {
+  outline: 3px solid var(--interactive-accent);
+  outline-offset: 2px;
+}
+
+.hmr-node.is-drop-invalid {
+  outline: 2px dashed var(--text-error, #d33);
+  outline-offset: 2px;
+}
+
+.hmr-split.is-resizing .hmr-canvas,
+.hmr-split.is-resizing .hmr-body {
+  pointer-events: none;
+}
+
+.hmr-divider {
+  background: var(--background-modifier-border);
+  cursor: col-resize;
+  flex: 0 0 5px;
+  position: relative;
+  touch-action: none;
+  transition: background-color 0.1s;
+}
+
+.hmr-divider::before {
+  content: "";
+  inset: 0 -4px;
+  position: absolute;
+}
+
+.hmr-divider:hover,
+.hmr-divider:focus-visible,
+.hmr-divider.is-dragging {
+  background: var(--interactive-accent);
+  outline: none;
+}
+
+.hmr-divider.is-hidden {
+  display: none;
+}
+
+.hmr-body {
+  --hmr-body-width: 45%;
+  flex: 0 0 var(--hmr-body-width);
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  position: relative;
+}
+
+.hmr-body-host {
+  min-height: 100%;
+}
+
+.hmr-body-restore {
+  display: none;
+}
+
+.hmr-body-collapsed-title {
+  display: none;
+}
+
+.hmr-body.is-collapsed {
+  align-items: center;
+  border-left: 1px solid var(--background-modifier-border);
+  display: flex;
+  flex: 0 0 32px;
+  flex-direction: column;
+  min-width: 32px;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.hmr-body.is-collapsed .hmr-body-host {
+  display: none;
+}
+
+.hmr-body.is-collapsed .hmr-body-restore {
+  display: inline-flex;
+}
+
+.hmr-body.is-collapsed .hmr-body-collapsed-title {
+  color: var(--text-muted);
+  display: block;
+  flex: 1 1 auto;
+  font-size: 12px;
+  margin-top: 8px;
+  min-height: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+.hmr-body-panel {
+  min-height: 100%;
+}
+
+.hmr-body-header {
+  align-items: center;
+  background: var(--background-primary-alt);
+  border-bottom: 1px solid var(--background-modifier-border);
+  display: flex;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 10px;
+}
+
+.hmr-body-label {
+  color: var(--text-muted);
+  flex: 0 0 auto;
+  font-size: 12px;
+}
+
+.hmr-body-title {
+  color: var(--text-normal);
+  flex: 1 1 auto;
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hmr-body-edit {
+  flex: 0 0 auto;
+}
+
+.hmr-body-content {
+  min-height: 120px;
+  padding: 14px 18px 22px;
+}
+
+.hmr-body-empty,
+.hmr-body-error {
+  color: var(--text-muted);
+  padding: 30px 0;
+  text-align: center;
+}
+
+.hmr-body-editor {
+  padding: 0;
+}
+
+.hmr-body-editor .cm-editor {
+  background: var(--background-primary);
+  color: var(--text-normal);
+  min-height: 140px;
+  outline: none;
+  padding: 14px 18px;
+}
+
+.hmr-body-editor .cm-content {
+  caret-color: var(--caret-color);
+  font-family: var(--font-text);
+  min-height: 112px;
+}
+
+.hmr-body-editor .cm-scroller {
+  font-family: var(--font-text);
+  line-height: var(--line-height-normal, 1.5);
+  overflow: auto;
+}
+
+.hmr-body-editor .cm-line {
+  padding: 0;
+}
+
+.hmr-body-heading {
+  padding: 14px 18px 0;
+}
+
+.hmr-body-heading :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+}
+
+/* Live preview: Obsidian-like rendering of the Markdown in the embedded editor */
+.hmr-body-editor .cm-activeLine {
+  background-color: transparent;
+}
+
+.hmr-body-editor .cm-lp-heading {
+  color: var(--text-normal);
+  line-height: 1.3;
+  padding-top: 0.4em;
+}
+
+.hmr-body-editor .cm-lp-h1 { color: var(--h1-color, var(--text-normal)); font-size: var(--h1-size, 2em); font-weight: var(--h1-weight, 700); }
+.hmr-body-editor .cm-lp-h2 { color: var(--h2-color, var(--text-normal)); font-size: var(--h2-size, 1.6em); font-weight: var(--h2-weight, 600); }
+.hmr-body-editor .cm-lp-h3 { color: var(--h3-color, var(--text-normal)); font-size: var(--h3-size, 1.37em); font-weight: var(--h3-weight, 600); }
+.hmr-body-editor .cm-lp-h4 { color: var(--h4-color, var(--text-normal)); font-size: var(--h4-size, 1.25em); font-weight: var(--h4-weight, 600); }
+.hmr-body-editor .cm-lp-h5 { color: var(--h5-color, var(--text-normal)); font-size: var(--h5-size, 1.12em); font-weight: var(--h5-weight, 600); }
+.hmr-body-editor .cm-lp-h6 { color: var(--h6-color, var(--text-muted)); font-size: var(--h6-size, 1em); font-weight: var(--h6-weight, 600); }
+
+.hmr-body-editor .cm-lp-strong {
+  font-weight: var(--bold-weight, 700);
+}
+
+.hmr-body-editor .cm-lp-em {
+  font-style: italic;
+}
+
+.hmr-body-editor .cm-lp-strike {
+  text-decoration: line-through;
+}
+
+.hmr-body-editor .cm-lp-code,
+.hmr-body-editor .cm-lp-codeblock {
+  font-family: var(--font-monospace);
+}
+
+.hmr-body-editor .cm-lp-code {
+  background: var(--code-background, var(--background-primary-alt));
+  border-radius: 4px;
+  color: var(--code-normal);
+  font-size: 0.9em;
+  padding: 0 4px;
+}
+
+.hmr-body-editor .cm-lp-codeblock {
+  background: var(--code-background, var(--background-primary-alt));
+  font-size: 0.9em;
+  padding: 0 12px !important;
+}
+
+.hmr-body-editor .cm-lp-codeblock-start {
+  border-radius: 6px 6px 0 0;
+}
+
+.hmr-body-editor .cm-lp-codeblock-end {
+  border-radius: 0 0 6px 6px;
+}
+
+.hmr-body-editor .cm-lp-codefence {
+  color: var(--text-faint);
+}
+
+.hmr-body-editor .cm-lp-link {
+  color: var(--link-color, var(--text-accent));
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.hmr-body-editor .cm-lp-tag {
+  background: var(--tag-background, var(--background-modifier-hover));
+  border-radius: 1em;
+  color: var(--tag-color, var(--text-accent));
+  padding: 0 0.5em;
+}
+
+.hmr-body-editor .cm-lp-quote {
+  border-left: 3px solid var(--blockquote-border-color, var(--interactive-accent));
+  color: var(--text-muted);
+  padding-left: 12px !important;
+}
+
+.hmr-body-editor .cm-lp-bullet {
+  color: var(--list-marker-color, var(--text-muted));
+  display: inline-block;
+  text-align: center;
+  width: 1em;
+}
+
+.hmr-body-editor .cm-lp-list-number {
+  color: var(--list-marker-color, var(--text-muted));
+}
+
+.hmr-body-editor .cm-lp-checkbox {
+  margin: 0 6px 0 0;
+  vertical-align: middle;
+}
+
+.hmr-body-editor .cm-lp-hr {
+  border-top: 2px solid var(--hr-color, var(--background-modifier-border));
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.hmr-scroll-area {
+  min-height: 100%;
+  min-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.hmr-surface {
+  left: 0;
+  min-height: 100%;
+  min-width: 100%;
+  position: absolute;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+.hmr-edges {
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  position: absolute;
+}
+
+.hmr-edge {
+  --branch: var(--interactive-accent);
+  fill: none;
+  stroke: var(--branch);
+  stroke-linecap: round;
+  stroke-opacity: 0.5;
+  stroke-width: 2;
+}
+
+.hmr-edge[data-depth="1"] {
+  stroke-opacity: 0.7;
+  stroke-width: 3.5;
+}
+
+.hmr-edge[data-depth="2"] {
+  stroke-width: 2.5;
+}
+
+.hmr-node {
+  --branch: var(--interactive-accent);
+  background: var(--background-primary);
+  border: 1px solid color-mix(in srgb, var(--branch) 35%, var(--background-modifier-border));
+  border-left: 5px solid var(--branch);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 18px -8px rgba(0, 0, 0, 0.22);
+  box-sizing: border-box;
+  color: var(--text-normal);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-height: var(--mindmap-node-min-height);
+  justify-content: center;
+  overflow: visible;
+  padding: 0 12px;
+  position: absolute;
+  min-width: var(--mindmap-node-min-width);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.hmr-node:hover {
+  border-color: var(--branch);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 12px 24px -8px rgba(0, 0, 0, 0.3);
+}
+
+.hmr-node.is-selected {
+  border-color: var(--branch);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--branch) 35%, transparent),
+    0 12px 24px -8px rgba(0, 0, 0, 0.3);
+}
+
+/* Depth: the first level is filled with its branch color, deeper levels get lighter and quieter. */
+.hmr-node.is-level-1 {
+  background: color-mix(in srgb, var(--branch) 16%, var(--background-primary));
+  border-color: color-mix(in srgb, var(--branch) 60%, var(--background-modifier-border));
+}
+
+.hmr-node.is-level-2 {
+  background: color-mix(in srgb, var(--branch) 7%, var(--background-primary));
+}
+
+.hmr-node.is-branch-head {
+  background: color-mix(in srgb, var(--branch) 16%, var(--background-primary));
+  border-color: color-mix(in srgb, var(--branch) 60%, var(--background-modifier-border));
+}
+
+.hmr-node.is-level-3,
+.hmr-node.is-level-4 {
+  border-radius: 10px;
+}
+
+/* The document root is the visual anchor of the map. */
+.hmr-node.is-document {
+  background: linear-gradient(135deg, var(--interactive-accent), color-mix(in srgb, var(--interactive-accent) 60%, #8b5cf6));
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px -8px rgba(var(--interactive-accent-rgb), 0.55);
+  color: var(--text-on-accent, #fff);
+}
+
+.hmr-node.is-document.is-selected {
+  box-shadow:
+    0 0 0 3px rgba(var(--interactive-accent-rgb), 0.35),
+    0 10px 28px -8px rgba(var(--interactive-accent-rgb), 0.55);
+}
+
+.hmr-node.is-file {
+  border-left-style: double;
+  border-left-width: 6px;
+}
+
+.hmr-node.is-list-item {
+  background: transparent;
+  border-style: dashed;
+  border-left-style: dashed;
+  border-left-width: 1px;
+  box-shadow: none;
+  color: var(--text-muted);
+}
+
+/* A stacked-card look hints at the subtree hidden below a collapsed node. */
+.hmr-node.has-collapsed-children {
+  box-shadow:
+    5px 5px 0 -1px var(--background-primary),
+    5px 5px 0 0 color-mix(in srgb, var(--branch) 55%, var(--background-modifier-border)),
+    10px 10px 0 -1px var(--background-primary),
+    10px 10px 0 0 color-mix(in srgb, var(--branch) 35%, var(--background-modifier-border));
+}
+
+.hmr-node-header {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  min-height: 100%;
+}
+
+.hmr-node-title {
+  flex: 1 1 auto;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1.3;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.is-level-0 .hmr-node-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.is-level-1 .hmr-node-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.is-list-item .hmr-node-title {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.hmr-node-title-input {
+  background: var(--background-primary);
+  border: 1px solid var(--interactive-accent);
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--text-normal);
+  flex: 1 1 auto;
+  font-family: inherit;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  height: 100%;
+  line-height: 1.3;
+  min-height: 28px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 2px 6px;
+  resize: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.hmr-node-measure-layer {
+  contain: layout style;
+  left: -100000px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
+}
+
+.hmr-node-badge {
+  background: color-mix(in srgb, var(--branch) 18%, transparent);
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--branch) 75%, var(--text-normal));
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 2px 7px;
+}
+
+.is-document .hmr-node-badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: inherit;
+}
+
+@media (max-width: 760px) {
+  .hmr-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .hmr-toolbar-title {
+    width: 100%;
+  }
+
+  .hmr-toolbar-actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .hmr-toolbar-actions button {
+    height: 44px;
+    width: 44px;
+  }
+
+  .hmr-zoom-controls {
+    flex: 1 1 220px;
+    justify-content: center;
+  }
+
+  .hmr-zoom-label {
+    min-width: 48px;
+  }
+
+  .hmr-toolbar-toggle {
+    min-height: 44px;
+  }
+
+  .hmr-split {
+    flex-direction: column;
+  }
+
+  .hmr-canvas {
+    flex-basis: 52%;
+    min-height: 120px;
+    min-width: 0;
+  }
+
+  .hmr-divider {
+    display: none;
+  }
+
+  .hmr-body {
+    border-top: 1px solid var(--background-modifier-border);
+    flex: 0 1 48%;
+    min-height: 150px;
+  }
+
+  .hmr-body.is-collapsed {
+    border-left: 0;
+    flex: 0 0 32px;
+    flex-direction: row;
+    min-height: 32px;
+    padding: 0 8px;
+  }
+
+  .hmr-body.is-collapsed .hmr-body-collapsed-title {
+    margin: 0 8px 0 0;
+    writing-mode: horizontal-tb;
+  }
+}
+
+/* The Obsidian editor tab shows one section only: hide the note-level title, breadcrumb and Properties panel.
+   !important and the attribute selector are deliberate: themes and Obsidian versions style these differently. */
+.hmr-note-leaf .inline-title,
+.hmr-note-leaf [class*="metadata-container"],
+.hmr-note-leaf [class*="frontmatter-container"],
+.hmr-note-leaf .view-header-title-container {
+  display: none !important;
+}

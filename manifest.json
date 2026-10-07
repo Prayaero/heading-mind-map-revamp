@@ -1,0 +1,10 @@
+{
+  "id": "heading-mind-map-revamp",
+  "name": "Heading Mind Map Revamp",
+  "version": "1.0.0",
+  "minAppVersion": "1.8.7",
+  "description": "Turn a note's headings into a colorful, draggable mind map and edit each section in the editor beside it.",
+  "author": "Aero",
+  "authorUrl": "https://github.com/prayaero",
+  "isDesktopOnly": false
+}

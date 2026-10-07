@@ -1,0 +1,60 @@
+name: Release plugin
+
+on:
+  # Pushing a tag that equals the version in manifest.json builds and publishes a release.
+  push:
+    tags:
+      - "*"
+  # Or run it by hand from the Actions tab: it releases the version in manifest.json.
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Work out the release version
+        run: |
+          version="$(node -p "require('./manifest.json').version")"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "$version" ]; then
+            echo "Release tag '${GITHUB_REF_NAME}' must match manifest.json version '$version'."
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Test
+        run: npm test
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$VERSION" \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION" \
+            --generate-notes \
+            main.js manifest.json styles.css
+
+      - name: Attest release assets
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            main.js
+            styles.css
