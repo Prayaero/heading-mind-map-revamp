@@ -1,6 +1,6 @@
 {
   "name": "heading-mind-map-revamp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Turn a note's headings into a colorful, draggable mind map and edit each section in the editor beside it.",
   "main": "main.js",
   "type": "module",
