@@ -2,7 +2,9 @@
 
 Turn the headings of any note into a colorful, draggable mind map, and edit each section in the editor beside it.
 
-Heading Mind Map Revamp is a revamped fork of [Heading Mindmap](https://github.com/JhihJian/obsidian-heading-mindmap) by JhihJian (MIT licensed), which is no longer maintained. It is English-only and keeps Markdown as the single source of truth: the mind map is just another view of your note, so nothing is stored outside your files.
+Your notes already have a structure: the headings. This plugin draws it as a living map you can rearrange, color and edit, without ever leaving your Markdown. Nothing is stored outside your files; the map is simply another way to look at the same note.
+
+This project builds on [Heading Mindmap](https://github.com/JhihJian/obsidian-heading-mindmap) by JhihJian (MIT licensed), which is no longer maintained, and is now an English-only, actively updated plugin.
 
 ![The mind map in light mode](docs/assets/mind-map-light.png)
 ![The mind map in dark mode](docs/assets/mind-map-dark.png)
