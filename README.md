@@ -4,7 +4,7 @@ Turn the headings of any note into a colorful, draggable mind map, and edit each
 
 Every note you write already has an outline: its headings. This plugin turns that outline into a mind map you can drag around, color and edit, while your notes stay plain Markdown. Nothing is saved anywhere else, so the map is just another way of looking at the same file.
 
-It started as a fork of [Heading Mindmap](https://github.com/JhihJian/obsidian-heading-mindmap) by JhihJian (MIT licensed), which is no longer maintained. This version is English-only and still being worked on.
+It started as a fork of [Heading Mindmap](https://github.com/JhihJian/obsidian-heading-mindmap) by JhihJian (MIT licensed), which is no longer maintained.
 
 ![The mind map in light mode](docs/assets/mind-map-light.png)
 ![The mind map in dark mode](docs/assets/mind-map-dark.png)
