@@ -18,9 +18,7 @@ export function createMindmapNodeSizeResolver(
   container: HTMLElement,
   cache: MindmapNodeSizeCache
 ): { resolve: NodeSizeResolver; destroy: () => void } {
-  const layer = container.ownerDocument.createElement("div");
-  layer.className = "hmr-node-measure-layer";
-  container.appendChild(layer);
+  const layer = container.createDiv({ cls: "hmr-node-measure-layer" });
 
   const resolve = (node: MindNode): NodeSize => {
     const key = getCacheKey(node);
@@ -39,35 +37,15 @@ export function createMindmapNodeSizeResolver(
 }
 
 function measureNode(layer: HTMLElement, node: MindNode): NodeSize {
-  const element = layer.ownerDocument.createElement("div");
-  element.className = `hmr-node is-${node.type} ${getNodeLevelClass(node)}`;
-  element.style.height = "auto";
-  element.style.left = "0";
-  element.style.minWidth = "0";
-  element.style.position = "relative";
-  element.style.top = "0";
-  element.style.width = "max-content";
-
-  const header = layer.ownerDocument.createElement("div");
-  header.className = "hmr-node-header";
-  element.appendChild(header);
-
-  const title = layer.ownerDocument.createElement("span");
-  title.className = "hmr-node-title";
-  title.textContent = node.title;
-  title.style.whiteSpace = "nowrap";
-  header.appendChild(title);
-
-  const badge = layer.ownerDocument.createElement("span");
-  badge.className = "hmr-node-badge";
-  badge.textContent = getNodeBadge(node);
-  header.appendChild(badge);
-  layer.appendChild(element);
+  const element = layer.createDiv({ cls: `hmr-node hmr-node-measuring is-${node.type} ${getNodeLevelClass(node)}` });
+  const header = element.createDiv({ cls: "hmr-node-header" });
+  const title = header.createSpan({ cls: "hmr-node-title hmr-node-title-measuring", text: node.title });
+  header.createSpan({ cls: "hmr-node-badge", text: getNodeBadge(node) });
 
   const naturalWidth = element.getBoundingClientRect().width;
   const width = clamp(Math.ceil(naturalWidth + NODE_WIDTH_SAFETY_MARGIN), NODE_WIDTH, MAX_NODE_WIDTH);
-  element.style.width = `${width}px`;
-  title.style.whiteSpace = "normal";
+  element.setCssProps({ width: `${width}px` });
+  title.removeClass("hmr-node-title-measuring");
 
   const titleHeight = title.getBoundingClientRect().height;
   const height = Math.max(NODE_HEIGHT, Math.ceil(titleHeight + NODE_VERTICAL_PADDING));

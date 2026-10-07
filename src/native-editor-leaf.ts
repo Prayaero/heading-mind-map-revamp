@@ -25,14 +25,14 @@ const STEP_TIMEOUT_MS = 4000;
 
 function withTimeout<T>(promise: Promise<T>, ms: number, what: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error(`${what} took too long`)), ms);
+    const timer = window.setTimeout(() => reject(new Error(`${what} took too long`)), ms);
     promise.then(
       (value) => {
-        clearTimeout(timer);
+        window.clearTimeout(timer);
         resolve(value);
       },
       (error: unknown) => {
-        clearTimeout(timer);
+        window.clearTimeout(timer);
         reject(error instanceof Error ? error : new Error(String(error)));
       }
     );

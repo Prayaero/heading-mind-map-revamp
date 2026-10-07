@@ -409,7 +409,7 @@
 }
 
 .hmr-body-editor .cm-lp-code,
-.hmr-body-editor .cm-lp-codeblock {
+.hmr-body-editor .cm-line.cm-lp-codeblock {
   font-family: var(--font-monospace);
 }
 
@@ -421,10 +421,10 @@
   padding: 0 4px;
 }
 
-.hmr-body-editor .cm-lp-codeblock {
+.hmr-body-editor .cm-line.cm-lp-codeblock {
   background: var(--code-background, var(--background-primary-alt));
   font-size: 0.9em;
-  padding: 0 12px !important;
+  padding: 0 12px;
 }
 
 .hmr-body-editor .cm-lp-codeblock-start {
@@ -452,10 +452,10 @@
   padding: 0 0.5em;
 }
 
-.hmr-body-editor .cm-lp-quote {
+.hmr-body-editor .cm-line.cm-lp-quote {
   border-left: 3px solid var(--blockquote-border-color, var(--interactive-accent));
   color: var(--text-muted);
-  padding-left: 12px !important;
+  padding-left: 12px;
 }
 
 .hmr-body-editor .cm-lp-bullet {
@@ -765,10 +765,24 @@
 }
 
 /* The Obsidian editor tab shows one section only: hide the note-level title, breadcrumb and Properties panel.
-   !important and the attribute selector are deliberate: themes and Obsidian versions style these differently. */
-.hmr-note-leaf .inline-title,
-.hmr-note-leaf [class*="metadata-container"],
-.hmr-note-leaf [class*="frontmatter-container"],
-.hmr-note-leaf .view-header-title-container {
-  display: none !important;
+   The repeated class and the attribute selectors raise specificity above theme and Obsidian rules. */
+body .hmr-note-leaf.hmr-note-leaf .inline-title,
+body .hmr-note-leaf.hmr-note-leaf [class*="metadata-container"],
+body .hmr-note-leaf.hmr-note-leaf [class*="frontmatter-container"],
+body .hmr-note-leaf.hmr-note-leaf .view-header-title-container {
+  display: none;
+}
+
+/* Off-screen measuring of node sizes (see mindmap-node-measurer.ts). */
+.hmr-node-measure-layer .hmr-node-measuring {
+  height: auto;
+  left: 0;
+  min-width: 0;
+  position: relative;
+  top: 0;
+  width: max-content;
+}
+
+.hmr-node-measure-layer .hmr-node-title-measuring {
+  white-space: nowrap;
 }

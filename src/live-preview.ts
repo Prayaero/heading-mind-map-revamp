@@ -17,10 +17,7 @@ import {
 
 class BulletWidget extends WidgetType {
   toDOM(): HTMLElement {
-    const el = document.createElement("span");
-    el.className = "cm-lp-bullet";
-    el.textContent = "•";
-    return el;
+    return createSpan({ cls: "cm-lp-bullet", text: "•" });
   }
 }
 
@@ -34,10 +31,8 @@ class CheckboxWidget extends WidgetType {
   }
 
   toDOM(view: EditorView): HTMLElement {
-    const input = document.createElement("input");
-    input.type = "checkbox";
+    const input = createEl("input", { cls: "task-list-item-checkbox cm-lp-checkbox", type: "checkbox" });
     input.checked = this.checked;
-    input.className = "task-list-item-checkbox cm-lp-checkbox";
     input.onmousedown = (event) => event.preventDefault();
     input.onclick = (event) => {
       event.preventDefault();
@@ -55,9 +50,7 @@ class CheckboxWidget extends WidgetType {
 
 class RuleWidget extends WidgetType {
   toDOM(): HTMLElement {
-    const el = document.createElement("span");
-    el.className = "cm-lp-hr";
-    return el;
+    return createSpan({ cls: "cm-lp-hr" });
   }
 }
 

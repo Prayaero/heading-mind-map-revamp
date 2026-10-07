@@ -25,9 +25,13 @@ describe("styles contract", () => {
   });
 
   it("hides the title and Properties panel in the Obsidian editor tab", () => {
-    const rule = /\.hmr-note-leaf \.inline-title[^{]*\{([^}]+)\}/.exec(css);
+    const rule = /\.hmr-note-leaf\.hmr-note-leaf \.inline-title[^{]*\{([^}]+)\}/.exec(css);
     expect(rule?.[0]).toContain('[class*="metadata-container"]');
     expect(rule?.[0]).toContain(".view-header-title-container");
-    expect(rule?.[1]).toContain("display: none !important");
+    expect(rule?.[1]).toContain("display: none");
+  });
+
+  it("does not rely on !important", () => {
+    expect(css.replace(/\/\*[\s\S]*?\*\//g, "")).not.toContain("!important");
   });
 });

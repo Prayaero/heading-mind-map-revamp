@@ -1,6 +1,9 @@
 import { MarkdownView } from "obsidian";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+// The plugin schedules timers through `window` (popout-window safe); the node test environment has none.
+vi.stubGlobal("window", globalThis);
+
 // Extends the stub at runtime (so `instanceof MarkdownView` holds) but is typed loosely.
 const BaseView = MarkdownView as unknown as new () => object;
 
